@@ -284,8 +284,10 @@ echo.
 goto :eof
 
 :run_postscript
-set "POSTSCRIPT_SOURCE=\\alien\comfyui\extra_model_paths.yaml"
+set "POSTSCRIPT_BASE=\\alien\comfyui"
+set "POSTSCRIPT_SOURCE=%POSTSCRIPT_BASE%\extra_model_paths.yaml"
 set "POSTSCRIPT_TARGET=.\ComfyUI\extra_model_paths.yaml"
+set "POSTSCRIPT_NL_REQUIREMENTS=%POSTSCRIPT_BASE%\custom_nodes\ComfyUI-NL_Nodes\requirements.txt"
 
 echo %green%::::::::::::::: %yellow%Postscript: Importing extra_model_paths.yaml%green% :::::::::::::::%reset%
 echo.
@@ -320,6 +322,13 @@ if errorlevel 1 (
 set "POSTSCRIPT_MODELS_FORWARD=%POSTSCRIPT_MODELS:\=/%"
 powershell -NoProfile -ExecutionPolicy Bypass -command "$target=$env:POSTSCRIPT_TARGET; $base=$env:POSTSCRIPT_MODELS_FORWARD; $content=Get-Content -LiteralPath $target -Raw; $content=$content.Replace('C:/AI/ComfyUI',$base); Set-Content -LiteralPath $target -Value $content -Encoding UTF8"
 
-echo %green%Postscript completed:%reset% %yellow%extra_model_paths.yaml%reset% imported and updated.
+if exist "%POSTSCRIPT_NL_REQUIREMENTS%" (
+    echo %green%Postscript:%reset% Installing requirements from %yellow%%POSTSCRIPT_NL_REQUIREMENTS%%reset%
+    .\python_embeded\python.exe -I -m uv pip install -r "%POSTSCRIPT_NL_REQUIREMENTS%" %UVargs%
+) else (
+    echo %warning%WARNING:%reset% Could not find %yellow%%POSTSCRIPT_NL_REQUIREMENTS%%reset%
+)
+
+echo %green%Postscript completed:%reset% %yellow%extra_model_paths.yaml%reset% imported and updated, NL requirements installed.
 echo.
 goto :eof
