@@ -123,7 +123,6 @@ call :get_node https://github.com/yolain/ComfyUI-Easy-Sam3					comfyui-easy-sam3
 call :get_node https://github.com/kijai/ComfyUI-SCAIL-Pose					ComfyUI-SCAIL-Pose
 call :get_node https://github.com/kijai/ComfyUI-MelBandRoFormer				ComfyUI-MelBandRoFormer
 call :get_node https://github.com/flybirdxx/ComfyUI-Qwen-TTS				qwen3-tts-comfyui
-call :get_node https://github.com/NOLABEL-VFX/ComfyUI-NL_Nodes			ComfyUI-NL_Nodes
 
 echo %green%::::::::::::::: %yellow%Installation/Updating SoX%green% :::::::::::::::%reset%
 echo.
