@@ -19,10 +19,10 @@
 
 # ComfyUI-Easy-Install
 One-click Portable **ComfyUI** installer for **Windows** 🔹 Nvidia GPUs  
-[![GitHub Release](https://img.shields.io/github/v/release/Tavris1/ComfyUI-Easy-Install)](https://github.com/Tavris1/ComfyUI-Easy-Install/releases/latest/download/ComfyUI-Easy-Install.zip)
-[![GitHub Release Date](https://img.shields.io/github/release-date/Tavris1/ComfyUI-Easy-Install?style=flat)](https://github.com/Tavris1/ComfyUI-Easy-Install/releases)
-[![GitHub All Releases](https://img.shields.io/github/downloads/Tavris1/ComfyUI-Easy-Install/total.svg)](https://github.com/Tavris1/ComfyUI-Easy-Install/releases)
-[![GitHub Downloads Latest](https://img.shields.io/github/downloads/Tavris1/ComfyUI-Easy-Install/latest/total?style=flat&label=⬇+latest&color=orange)](https://github.com/Tavris1/ComfyUI-Easy-Install/releases/latest/download/ComfyUI-Easy-Install.zip)
+[![GitHub Release](https://img.shields.io/github/v/release/NOLABEL-VFX/NLComfyUI-Easy-Install)](https://github.com/NOLABEL-VFX/NLComfyUI-Easy-Install/releases/latest/download/ComfyUI-Easy-Install.zip)
+[![GitHub Release Date](https://img.shields.io/github/release-date/NOLABEL-VFX/NLComfyUI-Easy-Install?style=flat)](https://github.com/NOLABEL-VFX/NLComfyUI-Easy-Install/releases)
+[![GitHub All Releases](https://img.shields.io/github/downloads/NOLABEL-VFX/NLComfyUI-Easy-Install/total.svg)](https://github.com/NOLABEL-VFX/NLComfyUI-Easy-Install/releases)
+[![GitHub Downloads Latest](https://img.shields.io/github/downloads/NOLABEL-VFX/NLComfyUI-Easy-Install/latest/total?style=flat&label=⬇+latest&color=orange)](https://github.com/NOLABEL-VFX/NLComfyUI-Easy-Install/releases/latest/download/ComfyUI-Easy-Install.zip)
 
 Dedicated to the **Pixaroma** team  
 [![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2FgggpkVgBf3%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&logo=discord&logoColor=white&label=Join%20Pixaroma%20Discord&color=FFDF00&suffix=%20users)](https://discord.com/invite/gggpkVgBf3)
@@ -78,7 +78,7 @@ ComfyUI-Easy-Install is a fully configured, portable ComfyUI in one click. No Py
 ---
 
 ## 🖥️ Windows Installation
-1. [**Download ComfyUI-Easy-Install**](https://github.com/Tavris1/ComfyUI-Easy-Install/releases/latest/download/ComfyUI-Easy-Install.zip)
+1. [**Download ComfyUI-Easy-Install**](https://github.com/NOLABEL-VFX/NLComfyUI-Easy-Install/releases/latest/download/ComfyUI-Easy-Install.zip)
 2. Extract the ZIP file to a new folder and run **`ComfyUI-Easy-Install.bat`**
 3. After setup, you can install or run the following components from the **Add-ons** folder:
     - **Easy-Models-Linker** - *Uses existing **MODELS** folder via **extra_model_paths.yaml**, no re-download needed*
@@ -103,7 +103,7 @@ ComfyUI-Easy-Install is a fully configured, portable ComfyUI in one click. No Py
 > [!TIP]
 > - Multiple ComfyUI installs allowed without conflicts.
 > - You can rename/move `ComfyUI-Easy-Install` folder after installation.
-> - [**For macOS / Linux click here**](https://github.com/Tavris1/ComfyUI-Easy-Install/tree/MAC-Linux)
+> - [**For macOS / Linux click here**](https://github.com/NOLABEL-VFX/NLComfyUI-Easy-Install/tree/MAC-Linux)
 
 
 <div align="center">
