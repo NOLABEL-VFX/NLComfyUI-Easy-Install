@@ -4,7 +4,8 @@ cd /D %~dp0
 
 if not defined UVargs set "UVargs=--no-cache --link-mode=copy"
 set "NL_INSTALL_ROOT=%cd%"
-if exist "%cd%\ComfyUI-Easy-Install\ComfyUI" set "NL_INSTALL_ROOT=%cd%\ComfyUI-Easy-Install"
+:: If launched from the parent folder, target the nested ComfyUI-Easy-Install root.
+if exist "%cd%\ComfyUI-Easy-Install\" set "NL_INSTALL_ROOT=%cd%\ComfyUI-Easy-Install"
 set "NL_COMFY_DIR=%NL_INSTALL_ROOT%\ComfyUI"
 set "NL_PYTHON=%NL_INSTALL_ROOT%\python_embeded\python.exe"
 
