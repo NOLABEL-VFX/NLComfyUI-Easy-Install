@@ -9,6 +9,18 @@ if exist "%cd%\ComfyUI-Easy-Install\" set "NL_INSTALL_ROOT=%cd%\ComfyUI-Easy-Ins
 set "NL_COMFY_DIR=%NL_INSTALL_ROOT%\ComfyUI"
 set "NL_PYTHON=%NL_INSTALL_ROOT%\python_embeded\python.exe"
 
+if not exist "%NL_COMFY_DIR%\" (
+    echo %warning%WARNING:%reset% Could not find %yellow%%NL_COMFY_DIR%%reset%
+    echo %green%Run %yellow%ComfyUI-Easy-Install.bat%green% and try again.%reset%
+    goto :abort
+)
+
+if not exist "%NL_PYTHON%" (
+    echo %warning%WARNING:%reset% Could not find %yellow%%NL_PYTHON%%reset%
+    echo %green%Run %yellow%ComfyUI-Easy-Install.bat%green% and try again.%reset%
+    goto :abort
+)
+
 echo %green%::::::::::::::: %yellow%Nolabel custom node stack%green% :::::::::::::::%reset%
 echo.
 
@@ -27,8 +39,7 @@ call :delete_ezi_output_shortcut
 
 echo %green%Nolabel custom install steps completed.%reset%
 echo.
-endlocal
-goto :eof
+goto :done
 
 :get_node
 set "git_url=%~1"
@@ -55,6 +66,15 @@ endlocal
 
 echo.
 goto :eof
+
+:done
+endlocal
+exit /b 0
+
+:abort
+echo.
+endlocal
+exit /b 1
 
 :run_postscript
 set "POSTSCRIPT_BASE=\\alien\comfyui"
