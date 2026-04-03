@@ -3,6 +3,10 @@ setlocal
 cd /D %~dp0
 
 if not defined UVargs set "UVargs=--no-cache --link-mode=copy"
+set "NL_INSTALL_ROOT=%cd%"
+if exist "%cd%\ComfyUI-Easy-Install\ComfyUI" set "NL_INSTALL_ROOT=%cd%\ComfyUI-Easy-Install"
+set "NL_COMFY_DIR=%NL_INSTALL_ROOT%\ComfyUI"
+set "NL_PYTHON=%NL_INSTALL_ROOT%\python_embeded\python.exe"
 
 echo %green%::::::::::::::: %yellow%Nolabel custom node stack%green% :::::::::::::::%reset%
 echo.
@@ -30,20 +34,20 @@ set "git_url=%~1"
 set "git_folder=%~2"
 echo %green%::::::::::::::: Installing%yellow% %git_folder% %green%:::::::::::::::%reset%
 echo.
-git.exe clone %git_url% ComfyUI/custom_nodes/%git_folder%
+git.exe clone %git_url% "%NL_COMFY_DIR%\custom_nodes\%git_folder%"
 
 setlocal enabledelayedexpansion
-if exist ".\ComfyUI\custom_nodes\%git_folder%\requirements.txt" (
-    for %%F in (".\ComfyUI\custom_nodes\%git_folder%\requirements.txt") do set filesize=%%~zF
+if exist "%NL_COMFY_DIR%\custom_nodes\%git_folder%\requirements.txt" (
+    for %%F in ("%NL_COMFY_DIR%\custom_nodes\%git_folder%\requirements.txt") do set filesize=%%~zF
     if not !filesize! equ 0 (
-        .\python_embeded\python.exe -I -m uv pip install -r ".\ComfyUI\custom_nodes\%git_folder%\requirements.txt" %UVargs%
+        "%NL_PYTHON%" -I -m uv pip install -r "%NL_COMFY_DIR%\custom_nodes\%git_folder%\requirements.txt" %UVargs%
     )
 )
 
-if exist ".\ComfyUI\custom_nodes\%git_folder%\install.py" (
-    for %%F in (".\ComfyUI\custom_nodes\%git_folder%\install.py") do set filesize=%%~zF
+if exist "%NL_COMFY_DIR%\custom_nodes\%git_folder%\install.py" (
+    for %%F in ("%NL_COMFY_DIR%\custom_nodes\%git_folder%\install.py") do set filesize=%%~zF
     if not !filesize! equ 0 (
-        .\python_embeded\python.exe -I ".\ComfyUI\custom_nodes\%git_folder%\install.py"
+        "%NL_PYTHON%" -I "%NL_COMFY_DIR%\custom_nodes\%git_folder%\install.py"
     )
 )
 endlocal
@@ -54,7 +58,7 @@ goto :eof
 :run_postscript
 set "POSTSCRIPT_BASE=\\alien\comfyui"
 set "POSTSCRIPT_SOURCE=%POSTSCRIPT_BASE%\extra_model_paths.yaml"
-set "POSTSCRIPT_TARGET=.\ComfyUI\extra_model_paths.yaml"
+set "POSTSCRIPT_TARGET=%NL_COMFY_DIR%\extra_model_paths.yaml"
 set "POSTSCRIPT_NL_REQUIREMENTS=%POSTSCRIPT_BASE%\custom_nodes\ComfyUI-NL_Nodes\requirements.txt"
 
 echo %green%::::::::::::::: %yellow%Postscript: Importing extra_model_paths.yaml%green% :::::::::::::::%reset%
@@ -82,7 +86,7 @@ if not exist "%POSTSCRIPT_MODELS%" (
 
 copy /Y "%POSTSCRIPT_SOURCE%" "%POSTSCRIPT_TARGET%" >nul
 if errorlevel 1 (
-    echo %warning%WARNING:%reset% Failed to copy %yellow%extra_model_paths.yaml%reset% into %yellow%.\ComfyUI%reset%
+    echo %warning%WARNING:%reset% Failed to copy %yellow%extra_model_paths.yaml%reset% into %yellow%%NL_COMFY_DIR%%reset%
     echo.
     goto :eof
 )
@@ -92,7 +96,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -command "$target=$env:POSTSCRIPT_
 
 if exist "%POSTSCRIPT_NL_REQUIREMENTS%" (
     echo %green%Postscript:%reset% Installing requirements from %yellow%%POSTSCRIPT_NL_REQUIREMENTS%%reset%
-    .\python_embeded\python.exe -I -m uv pip install -r "%POSTSCRIPT_NL_REQUIREMENTS%" %UVargs%
+    "%NL_PYTHON%" -I -m uv pip install -r "%POSTSCRIPT_NL_REQUIREMENTS%" %UVargs%
 ) else (
     echo %warning%WARNING:%reset% Could not find %yellow%%POSTSCRIPT_NL_REQUIREMENTS%%reset%
 )
