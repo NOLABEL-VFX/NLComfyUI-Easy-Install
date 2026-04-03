@@ -1,20 +1,19 @@
 @echo off
 setlocal
 
-set "NL_MAIN_SCRIPT=%~1"
-if not defined NL_MAIN_SCRIPT set "NL_MAIN_SCRIPT=ComfyUI-Easy-Install.bat"
+if not defined UVargs set "UVargs=--no-cache --link-mode=copy"
 
 echo %green%::::::::::::::: %yellow%Nolabel custom node stack%green% :::::::::::::::%reset%
 echo.
 
-call "%NL_MAIN_SCRIPT%" :get_node https://github.com/Lightricks/ComfyUI-LTXVideo/ ComfyUI-LTXVideo
-call "%NL_MAIN_SCRIPT%" :get_node https://github.com/ltdrdata/ComfyUI-Impact-Pack ComfyUI-Impact-Pack
-call "%NL_MAIN_SCRIPT%" :get_node https://github.com/Fannovel16/ComfyUI-Frame-Interpolation ComfyUI-Frame-Interpolation
-call "%NL_MAIN_SCRIPT%" :get_node https://github.com/akatz-ai/ComfyUI-DepthCrafter-Nodes ComfyUI-DepthCrafter-Nodes
-call "%NL_MAIN_SCRIPT%" :get_node https://github.com/LAOGOU-666/Comfyui-Memory_Cleanup Comfyui-Memory_Cleanup
-call "%NL_MAIN_SCRIPT%" :get_node https://github.com/FuouM/ComfyUI-MatAnyone ComfyUI-MatAnyone
-call "%NL_MAIN_SCRIPT%" :get_node https://github.com/alexjx/ComfyUI-Sa2VA-XJ ComfyUI-Sa2VA-XJ
-call "%NL_MAIN_SCRIPT%" :get_node https://github.com/Comfy-Org/Nvidia_RTX_Nodes_ComfyUI Nvidia_RTX_Nodes_ComfyUI
+call :get_node https://github.com/Lightricks/ComfyUI-LTXVideo/ ComfyUI-LTXVideo
+call :get_node https://github.com/ltdrdata/ComfyUI-Impact-Pack ComfyUI-Impact-Pack
+call :get_node https://github.com/Fannovel16/ComfyUI-Frame-Interpolation ComfyUI-Frame-Interpolation
+call :get_node https://github.com/akatz-ai/ComfyUI-DepthCrafter-Nodes ComfyUI-DepthCrafter-Nodes
+call :get_node https://github.com/LAOGOU-666/Comfyui-Memory_Cleanup Comfyui-Memory_Cleanup
+call :get_node https://github.com/FuouM/ComfyUI-MatAnyone ComfyUI-MatAnyone
+call :get_node https://github.com/alexjx/ComfyUI-Sa2VA-XJ ComfyUI-Sa2VA-XJ
+call :get_node https://github.com/Comfy-Org/Nvidia_RTX_Nodes_ComfyUI Nvidia_RTX_Nodes_ComfyUI
 
 call :run_postscript
 call :run_optional_addons
@@ -23,6 +22,30 @@ call :delete_ezi_output_shortcut
 echo %green%Nolabel custom install steps completed.%reset%
 echo.
 endlocal
+goto :eof
+
+:get_node
+set "git_url=%~1"
+set "git_folder=%~2"
+echo %green%::::::::::::::: Installing%yellow% %git_folder% %green%:::::::::::::::%reset%
+echo.
+git.exe clone %git_url% ComfyUI/custom_nodes/%git_folder%
+
+if exist ".\ComfyUI\custom_nodes\%git_folder%\requirements.txt" (
+    for %%F in (".\ComfyUI\custom_nodes\%git_folder%\requirements.txt") do set filesize=%%~zF
+    if not "%filesize%"=="0" (
+        .\python_embeded\python.exe -I -m uv pip install -r ".\ComfyUI\custom_nodes\%git_folder%\requirements.txt" %UVargs%
+    )
+)
+
+if exist ".\ComfyUI\custom_nodes\%git_folder%\install.py" (
+    for %%F in (".\ComfyUI\custom_nodes\%git_folder%\install.py") do set filesize=%%~zF
+    if not "%filesize%"=="0" (
+        .\python_embeded\python.exe -I ".\ComfyUI\custom_nodes\%git_folder%\install.py"
+    )
+)
+
+echo.
 goto :eof
 
 :run_postscript
