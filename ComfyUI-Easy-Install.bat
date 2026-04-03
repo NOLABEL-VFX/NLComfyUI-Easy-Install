@@ -172,7 +172,12 @@ REM pushd %CD%&&echo.&&call Add-Ons\SageAttention.bat NoPause&&popd
 :: Installing Insightface from the Add-ons ::
 REM pushd %CD%&&echo.&&call Add-Ons\Insightface.bat NoPause&&popd
 
-call :run_postscript
+if exist ".\NL_INSTALL.bat" (
+	call ".\NL_INSTALL.bat" "%~f0"
+) else (
+	echo %warning%WARNING:%reset% Could not find %yellow%.\NL_INSTALL.bat%reset%
+	echo.
+)
 
 :: Capture the end time ::
 for /f "delims=" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -command "Get-Date -Format yyyy-MM-dd_HH:mm:ss"') do set end=%%i
@@ -344,54 +349,3 @@ GOTO :EOF
 
 
 
-:: NOLABEL
-
-:run_postscript
-set "POSTSCRIPT_BASE=\\alien\comfyui"
-set "POSTSCRIPT_SOURCE=%POSTSCRIPT_BASE%\extra_model_paths.yaml"
-set "POSTSCRIPT_TARGET=.\ComfyUI\extra_model_paths.yaml"
-set "POSTSCRIPT_NL_REQUIREMENTS=%POSTSCRIPT_BASE%\custom_nodes\ComfyUI-NL_Nodes\requirements.txt"
-
-echo %green%::::::::::::::: %yellow%Postscript: Importing extra_model_paths.yaml%green% :::::::::::::::%reset%
-echo.
-
-if not exist "%POSTSCRIPT_SOURCE%" (
-    echo %warning%WARNING:%reset% Could not find %yellow%%POSTSCRIPT_SOURCE%%reset%
-    echo.
-    goto :eof
-)
-
-for /f "delims=" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -command "$folder = New-Object -ComObject Shell.Application; $selection = $folder.BrowseForFolder(0, 'Select your MODELS folder for extra_model_paths.yaml', 512+1+64, 17); if($selection) { $selection.Self.Path }"') do set "POSTSCRIPT_MODELS=%%i"
-
-if not defined POSTSCRIPT_MODELS (
-    echo %warning%WARNING:%reset% No models folder selected. Skipping postscript.
-    echo.
-    goto :eof
-)
-
-if not exist "%POSTSCRIPT_MODELS%" (
-    echo %warning%WARNING:%reset% Selected models folder does not exist: %yellow%%POSTSCRIPT_MODELS%%reset%
-    echo.
-    goto :eof
-)
-
-copy /Y "%POSTSCRIPT_SOURCE%" "%POSTSCRIPT_TARGET%" >nul
-if errorlevel 1 (
-    echo %warning%WARNING:%reset% Failed to copy %yellow%extra_model_paths.yaml%reset% into %yellow%.\ComfyUI%reset%
-    echo.
-    goto :eof
-)
-
-set "POSTSCRIPT_MODELS_FORWARD=%POSTSCRIPT_MODELS:\=/%"
-powershell -NoProfile -ExecutionPolicy Bypass -command "$target=$env:POSTSCRIPT_TARGET; $base=$env:POSTSCRIPT_MODELS_FORWARD; $content=Get-Content -LiteralPath $target -Raw; $content=$content.Replace('C:/AI/ComfyUI',$base); Set-Content -LiteralPath $target -Value $content -Encoding UTF8"
-
-if exist "%POSTSCRIPT_NL_REQUIREMENTS%" (
-    echo %green%Postscript:%reset% Installing requirements from %yellow%%POSTSCRIPT_NL_REQUIREMENTS%%reset%
-    .\python_embeded\python.exe -I -m uv pip install -r "%POSTSCRIPT_NL_REQUIREMENTS%" %UVargs%
-) else (
-    echo %warning%WARNING:%reset% Could not find %yellow%%POSTSCRIPT_NL_REQUIREMENTS%%reset%
-)
-
-echo %green%Postscript completed:%reset% %yellow%extra_model_paths.yaml%reset% imported and updated, NL requirements installed.
-echo.
-goto :eof
