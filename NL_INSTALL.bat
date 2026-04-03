@@ -1,5 +1,6 @@
 @echo off
 setlocal
+cd /D %~dp0
 
 if not defined UVargs set "UVargs=--no-cache --link-mode=copy"
 
@@ -31,19 +32,21 @@ echo %green%::::::::::::::: Installing%yellow% %git_folder% %green%:::::::::::::
 echo.
 git.exe clone %git_url% ComfyUI/custom_nodes/%git_folder%
 
+setlocal enabledelayedexpansion
 if exist ".\ComfyUI\custom_nodes\%git_folder%\requirements.txt" (
     for %%F in (".\ComfyUI\custom_nodes\%git_folder%\requirements.txt") do set filesize=%%~zF
-    if not "%filesize%"=="0" (
+    if not !filesize! equ 0 (
         .\python_embeded\python.exe -I -m uv pip install -r ".\ComfyUI\custom_nodes\%git_folder%\requirements.txt" %UVargs%
     )
 )
 
 if exist ".\ComfyUI\custom_nodes\%git_folder%\install.py" (
     for %%F in (".\ComfyUI\custom_nodes\%git_folder%\install.py") do set filesize=%%~zF
-    if not "%filesize%"=="0" (
+    if not !filesize! equ 0 (
         .\python_embeded\python.exe -I ".\ComfyUI\custom_nodes\%git_folder%\install.py"
     )
 )
+endlocal
 
 echo.
 goto :eof
