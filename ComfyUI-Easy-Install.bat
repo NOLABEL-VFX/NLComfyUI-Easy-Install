@@ -131,6 +131,11 @@ call :get_node https://github.com/flybirdxx/ComfyUI-Qwen-TTS				qwen3-tts-comfyu
 call :get_node https://github.com/Saganaki22/ComfyUI-FishAudioS2			ComfyUI-fish-audio-s2
 call :get_node https://github.com/pixaroma/ComfyUI-Pixaroma					ComfyUI-Pixaroma
 
+
+
+call :run_nl_nodes
+
+
 echo %green%::::::::::::::: %yellow%Installation/Updating SoX%green% :::::::::::::::%reset%
 echo.
 winget.exe install --id ChrisBagwell.SoX -e --accept-source-agreements --accept-package-agreements --silent
@@ -173,13 +178,6 @@ REM pushd %CD%&&echo.&&call Add-Ons\Nunchaku.bat NoPause&&popd
 REM pushd %CD%&&echo.&&call Add-Ons\SageAttention.bat NoPause&&popd
 :: Installing Insightface from the Add-ons ::
 REM pushd %CD%&&echo.&&call Add-Ons\Insightface.bat NoPause&&popd
-
-if exist ".\NL_INSTALL.bat" (
-	call ".\NL_INSTALL.bat" "%~f0"
-) else (
-	echo %warning%WARNING:%reset% Could not find %yellow%.\NL_INSTALL.bat%reset%
-	echo.
-)
 
 :: Capture the end time ::
 for /f "delims=" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -command "Get-Date -Format yyyy-MM-dd_HH:mm:ss"') do set end=%%i
@@ -311,6 +309,16 @@ if exist ".\ComfyUI\custom_nodes\%git_folder%\install.py" (
 endlocal
 
 echo.
+goto :eof
+
+:run_nl_nodes
+echo %green%::::::::::::::: %yellow%Installation/Installing NL Nodes%green% :::::::::::::::%reset%
+if exist "%~dp0NL_INSTALL.bat" (
+	call "%~dp0NL_INSTALL.bat"
+) else (
+	echo %warning%WARNING:%reset% Could not find %yellow%%~dp0NL_INSTALL.bat%reset%
+	echo.
+)
 goto :eof
 
 :NVIDIA_DRIVER_CHECK
